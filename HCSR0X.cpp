@@ -1,6 +1,6 @@
 /*
   HCSR0X.cpp
-  Mai Huu Luong - Nov, 2015
+  Mai Huu Luong - Nov, 2016
 */
 
 #include  <Arduino.h>
@@ -25,9 +25,9 @@ HCSR0X::HCSR0X( uint8_t Trigger, uint8_t Echo ,  int max_range_in_cm){
 float  HCSR0X::ping(int type)
 {
 
-  long BeginChrono,EndChrono,DeltaChrono =0;
+  long /*BeginChrono,*/EndChrono,DeltaChrono =0;
 
-  BeginChrono  = micros();
+  //BeginChrono  = micros();
 
   BIT_OFF(_TriggerRegister, _TriggerBit);
   _delay_us(2);
@@ -43,8 +43,8 @@ float  HCSR0X::ping(int type)
     if (micros() > _break_time)
       return ERROR_RANGE;
   }
-  BeginChrono  = micros();
-  _break_time  = BeginChrono + _Time_out;
+  //BeginChrono  = micros();
+  _break_time  =  micros() + _Time_out;
 
   while(BIT_GET(_EchoRegister,_EchoBit)) { 			//Echo begin wait until echo response end
     EndChrono = micros();
@@ -52,7 +52,7 @@ float  HCSR0X::ping(int type)
     if (EndChrono > _break_time)
       return OUT_RANGE;
   }
-  DeltaChrono = EndChrono - BeginChrono - 20; // overheat approximately 20 microseconds for the operations.
+  DeltaChrono = EndChrono - (_break_time - _Time_out) - 20; // overheat approximately 20 microseconds for the operations.
   return float(DeltaChrono/2)/(type == CM?SONARS_SPEED_RATIO_CM:SONARS_SPEED_RATIO_INC);
 }
 
