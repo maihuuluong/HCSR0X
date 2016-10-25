@@ -88,7 +88,7 @@ void SRManager::ping()
   {
     if(_startChrono[i] > 0)
       if(_endChrono[i] > 0)
-        _deltaTime[i] = _endChrono[i] - _startChrono[i] -25 ; // overheat
+        _deltaTime[i] = _endChrono[i] - _startChrono[i] -25 ; // overheat 25ms for processing
       else
         _deltaTime[i] = OUT_RANGE;
     else
