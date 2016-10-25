@@ -67,21 +67,20 @@ void SRManager::ping()
   //_delay_ms(500);
   _break_time = micros() + _Time_out;
 
-  int flag = 0; // to check if all sensor have returned the value
+
   do{
     test = micros();
     for(i = 0; i < _size ; i++)
     {
       int bit = BIT_GET(*_EchoRegister[i],_EchoBit[i]);
-      if( !bit && _startChrono[i] && !_endChrono[i]){
-          _endChrono[i]  = test;     // Pulse end
-          flag++;
-      }
-      else if( bit && !_startChrono[i]) {
+      if( bit && !_startChrono[i]) {
           _startChrono[i] = test;    // Just start receive the pulse
       }
+      if( !bit && _startChrono[i] && !_endChrono[i]){
+          _endChrono[i]  = test;     // Pulse end
+      }
     }
-  }while(test < _break_time && flag < _size);
+  }while(test < _break_time);
 
 
   for( i = 0; i < _size ; i++)
@@ -96,10 +95,10 @@ void SRManager::ping()
   }
 }
 
-float SRManager::getDistance(int index , int type)
+int SRManager::getDistance(int index , int type)
 {
   if(_deltaTime[index] > 0)
-    return (float)(_deltaTime[index]/2)/(type == CM?SONARS_SPEED_RATIO_CM:SONARS_SPEED_RATIO_INC);
+    return int(_deltaTime[index]/2)/(type == CM?SONARS_SPEED_RATIO_CM:SONARS_SPEED_RATIO_INC);
   else
     return _deltaTime[index];
 }
