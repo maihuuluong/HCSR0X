@@ -29,24 +29,24 @@ float  HCSR0X::ping(int type)
 
   //BeginChrono  = micros();
 
-  BIT_OFF(_TriggerRegister, _TriggerBit);
+  BIT_OFF(*_TriggerRegister, _TriggerBit);
   _delay_us(2);
   //digitalWrite(_Trigger, HIGH);
-  BIT_ON(_TriggerRegister, _TriggerBit);
+  BIT_ON(*_TriggerRegister, _TriggerBit);
   //_delay_10_micros();
   _delay_us(10);
   //digitalWrite(_Trigger, LOW);
-  BIT_OFF(_TriggerRegister , _TriggerBit);
+  BIT_OFF(*_TriggerRegister , _TriggerBit);
 
   _break_time = micros() + _Time_out;
-  while(!BIT_GET(_EchoRegister,_EchoBit)){
+  while(!BIT_GET(*_EchoRegister,_EchoBit)){
     if (micros() > _break_time)
       return ERROR_RANGE;
   }
   //BeginChrono  = micros();
   _break_time  =  micros() + _Time_out;
 
-  while(BIT_GET(_EchoRegister,_EchoBit)) { 			//Echo begin wait until echo response end
+  while(BIT_GET(*_EchoRegister,_EchoBit)) { 			//Echo begin wait until echo response end
     EndChrono = micros();
 
     if (EndChrono > _break_time)
