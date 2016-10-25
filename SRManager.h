@@ -45,7 +45,7 @@ class SRManager
 
     */
 
-  int getDistance(int index, int type=CM);
+  float getDistance(int index, int type=CM);
 
      /*!
     @method
